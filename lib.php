@@ -792,7 +792,7 @@ function turnitintool_refresh_events($courseid=0) {
         foreach ($parts as $part) {
             $event->timestart=$part->dtdue;
 
-            if ($events = turnitintool_get_record_select('event', "modulename='turnitintool' AND instance=".$turnitintool->id." AND name='".$turnitintool->name." - ".$part->partname."'")) {
+            if ($events = turnitintool_get_record_select('event', "modulename='turnitintool' AND instance = ? AND name = ?", array($turnitintool->id, $turnitintool->name." - ".$part->partname))){
                 $event->id = $events->id;
                 if(method_exists('calendar_event', 'update')){
                     $calendarevent = calendar_event::load($event->id);
@@ -1824,7 +1824,7 @@ function turnitintool_remove_tiitutor($cm,$turnitintool,$tutor) {
                         $post->new_teacher_email=(string)$tutorobj->email;
                         $tii->changeOwner($post,get_string('changingowner','turnitintool'));
                         unset($post->new_teacher_email);
-                        $newowner=turnitintool_get_record_select('user',"email='".$tutorobj->email."'");
+                        $newowner=turnitintool_get_record_select('user',"email = ?", array($tutorobj->email));
                         $tiicourse=turnitintool_get_record('turnitintool_courses','courseid',$turnitintool->course);
                         $tiicourse->ownerid=$newowner->id;
                         turnitintool_update_record('turnitintool_courses',$tiicourse);
